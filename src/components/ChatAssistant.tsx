@@ -9,6 +9,8 @@ interface ChatAssistantProps {
   onClose: () => void;
 }
 
+
+
 const ChatAssistant = ({ isOpen, onClose }: ChatAssistantProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
