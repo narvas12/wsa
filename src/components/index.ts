@@ -8,3 +8,5 @@ export { default as Contact } from './Contact';
 export { default as Footer } from './Footer';
 export { default as ChatAssistant } from './ChatAssistant';
 export { default as ChatButton } from './ChatButton';
+export { default as ScrollToTop } from './ScrollToTop';
+export { ToastContainer } from './Toast';

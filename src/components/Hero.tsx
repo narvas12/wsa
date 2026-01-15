@@ -50,10 +50,42 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 mb-12">
-              <motion.a href="#courses" className="btn-primary inline-flex items-center gap-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.a
+                href="#courses"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.querySelector('#courses');
+                  if (element) {
+                    const headerHeight = 80;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerHeight;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                  }
+                }}
+                className="btn-primary inline-flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Navigate to courses section"
+              >
                 Start Learning <ArrowRight className="w-5 h-5" />
               </motion.a>
-              <motion.a href="#about" className="btn-secondary inline-flex items-center gap-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.a
+                href="#about"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.querySelector('#about');
+                  if (element) {
+                    const headerHeight = 80;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerHeight;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                  }
+                }}
+                className="btn-secondary inline-flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Navigate to about section"
+              >
                 <Play className="w-5 h-5" /> Watch Demo
               </motion.a>
             </div>

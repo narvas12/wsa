@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Bot, User, Sparkles, AlertCircle } from 'lucide-react';
+import { X, Send, Bot, User, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import type { Message } from '../types';
 import { sendMessage, isApiConfigured } from '../services/chatService';
+import { useToastContext } from '../context/ToastContext';
 
 interface ChatAssistantProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ What would you like to learn about today? 📈`,
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const apiConfigured = isApiConfigured();
+  const { error: showError } = useToastContext();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,15 +58,21 @@ What would you like to learn about today? 📈`,
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: response, timestamp: new Date() };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      const errorMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: 'I apologize, but I encountered an error. Please try again.', timestamp: new Date() };
+      console.error('Chat error:', error);
+      const errorMsg = error instanceof Error ? error.message : 'I apologize, but I encountered an error. Please try again.';
+      const errorMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: errorMsg, timestamp: new Date() };
       setMessages((prev) => [...prev, errorMessage]);
+      showError('Failed to send message. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.repeat) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   const formatMessage = (content: string) => {
@@ -89,6 +97,9 @@ What would you like to learn about today? 📈`,
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className="fixed bottom-4 right-4 w-full max-w-md h-[600px] max-h-[80vh] z-50 flex flex-col rounded-3xl overflow-hidden border border-primary-500/20 shadow-2xl"
             style={{ background: 'var(--bg-secondary)' }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="AI Chat Assistant"
           >
             <div className="flex items-center justify-between p-4 border-b border-adaptive bg-primary-950/50 dark:bg-primary-950/50 light:bg-primary-50">
               <div className="flex items-center gap-3">
@@ -100,7 +111,12 @@ What would you like to learn about today? 📈`,
                   <p className="text-xs text-primary-500">Forex AI Assistant</p>
                 </div>
               </div>
-              <motion.button onClick={onClose} className="p-2 rounded-lg hover:bg-primary-500/10 text-adaptive-muted hover:text-adaptive transition-colors" whileTap={{ scale: 0.95 }}>
+              <motion.button
+                onClick={onClose}
+                className="p-2 rounded-lg hover:bg-primary-500/10 text-adaptive-muted hover:text-adaptive transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                whileTap={{ scale: 0.95 }}
+                aria-label="Close chat"
+              >
                 <X className="w-5 h-5" />
               </motion.button>
             </div>
@@ -131,9 +147,13 @@ What would you like to learn about today? 📈`,
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
                   <div className="flex items-start gap-2">
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                      <Bot className="w-4 h-4 text-white" />
+                      <Loader2 className="w-4 h-4 text-white animate-spin" />
                     </div>
-                    <div className="chat-message assistant"><div className="typing-indicator"><span></span><span></span><span></span></div></div>
+                    <div className="chat-message assistant">
+                      <div className="typing-indicator">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -145,7 +165,17 @@ What would you like to learn about today? 📈`,
                 <p className="text-xs text-adaptive-muted mb-2">Quick questions:</p>
                 <div className="flex flex-wrap gap-2">
                   {quickQuestions.map((question) => (
-                    <motion.button key={question} onClick={() => setInput(question)} className="px-3 py-1.5 rounded-lg bg-primary-500/10 border border-primary-500/20 text-xs text-primary-500 hover:bg-primary-500/20 transition-all" whileHover={{ scale: 1.02 }}>
+                    <motion.button
+                      key={question}
+                      onClick={() => {
+                        setInput(question);
+                        inputRef.current?.focus();
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-primary-500/10 border border-primary-500/20 text-xs text-primary-500 hover:bg-primary-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      aria-label={`Ask: ${question}`}
+                    >
                       {question}
                     </motion.button>
                   ))}
@@ -155,12 +185,30 @@ What would you like to learn about today? 📈`,
 
             <div className="p-4 border-t border-adaptive bg-primary-950/30 dark:bg-primary-950/30 light:bg-gray-50">
               <div className="flex items-center gap-2">
-                <input ref={inputRef} type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={handleKeyPress} placeholder="Ask about forex trading..." disabled={isLoading} className="flex-1 px-4 py-3 rounded-xl bg-adaptive-secondary border border-adaptive text-adaptive placeholder-dark-400 focus:border-primary-500 focus:outline-none input-glow transition-all disabled:opacity-50" />
-                <motion.button onClick={handleSend} disabled={!input.trim() || isLoading} className="p-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white disabled:opacity-50" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  placeholder="Ask about forex trading..."
+                  disabled={isLoading}
+                  className="flex-1 px-4 py-3 rounded-xl bg-adaptive-secondary border border-adaptive text-adaptive placeholder-adaptive-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 input-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Chat input"
+                  aria-describedby="chat-input-help"
+                />
+                <motion.button
+                  onClick={handleSend}
+                  disabled={!input.trim() || isLoading}
+                  className="p-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all"
+                  whileHover={!isLoading && input.trim() ? { scale: 1.05 } : {}}
+                  whileTap={!isLoading && input.trim() ? { scale: 0.95 } : {}}
+                  aria-label="Send message"
+                >
                   <Send className="w-5 h-5" />
                 </motion.button>
               </div>
-              <p className="text-center text-xs text-adaptive-muted mt-2">Powered by AI • Forex topics only</p>
+              <p id="chat-input-help" className="text-center text-xs text-adaptive-muted mt-2">Powered by AI • Forex topics only</p>
             </div>
           </motion.div>
         </>

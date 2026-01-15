@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { ToastProvider, useToastContext } from './context/ToastContext';
 import {
   Header,
   Hero,
@@ -11,30 +12,43 @@ import {
   Footer,
   ChatAssistant,
   ChatButton,
+  ScrollToTop,
+  ToastContainer,
 } from './components';
 
-function App() {
+function AppContent() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { toasts, removeToast } = useToastContext();
 
   return (
-    <ThemeProvider>
-      <div className="min-h-screen bg-adaptive text-adaptive transition-colors duration-300">
-        <Header onOpenChat={() => setIsChatOpen(true)} />
-        
-        <main>
-          <Hero />
-          <About />
-          <Gallery />
-          <Courses />
-          <Testimonials />
-          <Contact />
-        </main>
-        
-        <Footer />
+    <div className="min-h-screen bg-adaptive text-adaptive transition-colors duration-300">
+      <Header onOpenChat={() => setIsChatOpen(true)} />
+      
+      <main>
+        <Hero />
+        <About />
+        <Gallery />
+        <Courses />
+        <Testimonials />
+        <Contact />
+      </main>
+      
+      <Footer />
 
-        <ChatButton isOpen={isChatOpen} onClick={() => setIsChatOpen(!isChatOpen)} />
-        <ChatAssistant isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      </div>
+      <ChatButton isOpen={isChatOpen} onClick={() => setIsChatOpen(!isChatOpen)} />
+      <ChatAssistant isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <ScrollToTop />
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </ThemeProvider>
   );
 }

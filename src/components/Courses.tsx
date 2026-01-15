@@ -64,7 +64,27 @@ const Courses = () => {
                     </li>
                   ))}
                 </ul>
-                <motion.a href="#contact" className={`w-full py-4 rounded-xl font-semibold text-center flex items-center justify-center gap-2 transition-all ${index === 2 ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white' : 'bg-primary-500/10 border border-primary-500/30 text-primary-500'}`} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <motion.a
+                  href="#contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.querySelector('#contact');
+                    if (element) {
+                      const headerHeight = 80;
+                      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                      const offsetPosition = elementPosition - headerHeight;
+                      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                  }}
+                  className={`w-full py-4 rounded-xl font-semibold text-center flex items-center justify-center gap-2 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                    index === 2
+                      ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:shadow-lg hover:shadow-primary-500/30'
+                      : 'bg-primary-500/10 border border-primary-500/30 text-primary-500 hover:bg-primary-500/20'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  aria-label={`Enroll in ${course.title} course`}
+                >
                   Enroll Now <ArrowRight className="w-4 h-4" />
                 </motion.a>
               </div>

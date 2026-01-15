@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, TrendingUp, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { COMPANY_INFO } from '../data/constants';
 import { useTheme } from '../context/ThemeContext';
 
@@ -27,6 +27,22 @@ const Header = ({ onOpenChat }: HeaderProps) => {
     { label: 'Contact', href: '#contact' },
   ];
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const headerHeight = 80;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <>
       <motion.header
@@ -40,8 +56,9 @@ const Header = ({ onOpenChat }: HeaderProps) => {
           <div className="flex items-center justify-between">
             <motion.a href="#home" className="flex items-center gap-3 group" whileHover={{ scale: 1.02 }}>
               <div className="relative">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center glow-primary">
-                  <TrendingUp className="w-7 h-7 text-white" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center glow-primary">
+                  <img className='w-11 h-11 rounded-full' src="https://res.cloudinary.com/dpwddkw5t/image/upload/v1768473202/wsa_logo-modified_baim58.png" alt="" />
+                  
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-500 rounded-full animate-pulse" />
               </div>
@@ -51,16 +68,18 @@ const Header = ({ onOpenChat }: HeaderProps) => {
               </div>
             </motion.a>
 
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-8" role="navigation" aria-label="Main navigation">
               {navItems.map((item, index) => (
                 <motion.a
                   key={item.label}
                   href={item.href}
-                  className="relative text-adaptive-secondary hover:text-primary-500 transition-colors duration-300 font-medium"
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className="relative text-adaptive-secondary hover:text-primary-500 transition-colors duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg px-2 py-1"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -2 }}
+                  aria-label={`Navigate to ${item.label} section`}
                 >
                   {item.label}
                 </motion.a>
@@ -71,27 +90,31 @@ const Header = ({ onOpenChat }: HeaderProps) => {
               {/* Theme Toggle */}
               <motion.button
                 onClick={toggleTheme}
-                className="p-2.5 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 hover:bg-primary-500/20 transition-all duration-300"
+                className="p-2.5 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 hover:bg-primary-500/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                aria-label="Toggle theme"
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                aria-pressed={theme === 'dark'}
               >
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </motion.button>
 
               <motion.button
                 onClick={onOpenChat}
-                className="px-5 py-2.5 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 font-medium hover:bg-primary-500/20 hover:border-primary-400 transition-all duration-300"
+                className="px-5 py-2.5 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 font-medium hover:bg-primary-500/20 hover:border-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label="Open AI chat assistant"
               >
                 AI Assistant
               </motion.button>
               <motion.a
                 href="#courses"
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium hover:shadow-lg hover:shadow-primary-500/30 transition-all duration-300"
+                onClick={(e) => handleNavClick(e, '#courses')}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium hover:shadow-lg hover:shadow-primary-500/30 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label="Navigate to courses section to enroll"
               >
                 Enroll Now
               </motion.a>
@@ -100,15 +123,19 @@ const Header = ({ onOpenChat }: HeaderProps) => {
             <div className="flex lg:hidden items-center gap-2">
               <motion.button
                 onClick={toggleTheme}
-                className="p-2 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500"
+                className="p-2 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 whileTap={{ scale: 0.95 }}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                aria-pressed={theme === 'dark'}
               >
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </motion.button>
               <motion.button
-                className="p-2 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500"
+                className="p-2 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 whileTap={{ scale: 0.95 }}
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </motion.button>
@@ -130,11 +157,12 @@ const Header = ({ onOpenChat }: HeaderProps) => {
                 <motion.a
                   key={item.label}
                   href={item.href}
-                  className="block text-adaptive-secondary hover:text-primary-500 transition-colors py-2 font-medium"
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className="block text-adaptive-secondary hover:text-primary-500 transition-colors py-2 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg px-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label={`Navigate to ${item.label} section`}
                 >
                   {item.label}
                 </motion.a>
@@ -142,14 +170,16 @@ const Header = ({ onOpenChat }: HeaderProps) => {
               <div className="pt-4 border-t border-primary-500/20 space-y-3">
                 <button
                   onClick={() => { onOpenChat(); setIsMobileMenuOpen(false); }}
-                  className="w-full py-3 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 font-medium"
+                  className="w-full py-3 rounded-xl bg-primary-500/10 border border-primary-500/30 text-primary-500 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-label="Open AI chat assistant"
                 >
                   AI Assistant
                 </button>
                 <a
                   href="#courses"
-                  className="block w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, '#courses')}
+                  className="block w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium text-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  aria-label="Navigate to courses section to enroll"
                 >
                   Enroll Now
                 </a>

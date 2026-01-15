@@ -76,18 +76,18 @@ const About = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <div className="photo-frame aspect-[4/3] rounded-2xl overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=300&fit=crop" alt="Trading classroom" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" />
+                  <img src="https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972427/image11_crfjic.jpg" alt="Trading classroom" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
                 </div>
                 <div className="photo-frame aspect-square rounded-2xl overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=400&fit=crop" alt="Market analysis" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" />
+                  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=400&fit=crop" alt="Market analysis" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
                 </div>
               </div>
               <div className="space-y-4 pt-8">
                 <div className="photo-frame aspect-square rounded-2xl overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=400&h=400&fit=crop" alt="Trading charts" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" />
+                  <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=400&h=400&fit=crop" alt="Trading charts" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
                 </div>
                 <div className="photo-frame aspect-[4/3] rounded-2xl overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=400&h=300&fit=crop" alt="Success celebration" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" />
+                  <img src="https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972428/image3_bdpwuw.jpg" alt="Success celebration" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@ const About = () => {
                 <div className="p-6 rounded-2xl bg-adaptive-card border border-adaptive transition-all duration-500 card-hover">
                   <div className="flex items-start gap-4">
                     <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-primary-500/30">
-                      <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                      <img src={member.image} alt={member.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     </div>
                     <div>
                       <h4 className="text-xl font-bold text-adaptive">{member.name}</h4>

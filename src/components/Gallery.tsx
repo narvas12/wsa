@@ -68,11 +68,13 @@ const Gallery = () => {
             <button
               key={category.id}
               onClick={() => setFilter(category.id)}
-              className={`px-6 py-2.5 rounded-xl font-medium transition-all duration-300 ${
+              className={`px-6 py-2.5 rounded-xl font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                 filter === category.id
                   ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30'
                   : 'bg-primary-500/10 border border-primary-500/20 text-adaptive-secondary hover:text-adaptive hover:border-primary-500/40'
               }`}
+              aria-pressed={filter === category.id}
+              aria-label={`Filter gallery by ${category.label}`}
             >
               {category.label}
             </button>
@@ -91,9 +93,24 @@ const Gallery = () => {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 className={`group cursor-pointer ${index % 5 === 0 ? 'sm:col-span-2 sm:row-span-2' : ''}`}
                 onClick={() => setSelectedImage(image)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedImage(image);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`View ${image.caption} image`}
               >
                 <div className="photo-frame relative h-full min-h-[200px] overflow-hidden rounded-2xl">
-                  <img src={image.src} alt={image.caption} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
+                  <img
+                    src={image.src}
+                    alt={image.caption}
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary-950/90 via-primary-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       <p className="text-white font-medium">{image.caption}</p>
@@ -116,13 +133,25 @@ const Gallery = () => {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl"
             onClick={() => setSelectedImage(null)}
           >
-            <button className="absolute top-4 right-4 p-3 rounded-full bg-primary-500/20 text-white hover:bg-primary-500/40 transition-colors z-10" onClick={() => setSelectedImage(null)}>
+            <button
+              className="absolute top-4 right-4 p-3 rounded-full bg-primary-500/20 text-white hover:bg-primary-500/40 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              onClick={() => setSelectedImage(null)}
+              aria-label="Close image viewer"
+            >
               <X className="w-6 h-6" />
             </button>
-            <button className="absolute left-4 p-3 rounded-full bg-primary-500/20 text-white hover:bg-primary-500/40 transition-colors z-10" onClick={(e) => { e.stopPropagation(); handlePrev(); }}>
+            <button
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary-500/20 text-white hover:bg-primary-500/40 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+              aria-label="Previous image"
+            >
               <ChevronLeft className="w-6 h-6" />
             </button>
-            <button className="absolute right-4 p-3 rounded-full bg-primary-500/20 text-white hover:bg-primary-500/40 transition-colors z-10" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary-500/20 text-white hover:bg-primary-500/40 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              onClick={(e) => { e.stopPropagation(); handleNext(); }}
+              aria-label="Next image"
+            >
               <ChevronRight className="w-6 h-6" />
             </button>
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative max-w-5xl max-h-[80vh] w-full" onClick={(e) => e.stopPropagation()}>

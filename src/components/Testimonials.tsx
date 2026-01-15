@@ -39,7 +39,7 @@ const Testimonials = () => {
                 <p className="text-adaptive-secondary mb-6 leading-relaxed relative z-10">"{testimonial.content}"</p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-primary-500/30">
-                    <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
+                    <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   </div>
                   <div>
                     <h4 className="font-bold text-adaptive">{testimonial.name}</h4>

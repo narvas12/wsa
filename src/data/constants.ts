@@ -29,31 +29,31 @@ export const COMPANY_INFO = {
 export const GALLERY_IMAGES: GalleryImage[] = [
   {
     id: 1,
-    src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972429/image14_kde24l.jpg',
     caption: 'Live Trading Session - Students analyzing EUR/USD',
     category: 'classroom',
   },
   {
     id: 2,
-    src: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972428/image3_bdpwuw.jpg',
     caption: 'Graduation Ceremony 2024 - Class of Excellence',
     category: 'graduation',
   },
   {
     id: 3,
-    src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972429/WhatsApp_Image_2025-10-27_at_7.50.28_cq8f5m.jpg',
     caption: 'Advanced Technical Analysis Workshop',
     category: 'workshop',
   },
   {
     id: 4,
-    src: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972427/image11_crfjic.jpg',
     caption: 'Team Building & Strategy Session',
     category: 'events',
   },
   {
     id: 5,
-    src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972429/WhatsApp_Image_2025-10-27_at_7.50.28_AM_kafkoo.jpg',
     caption: 'One-on-One Mentorship Program',
     category: 'classroom',
   },
@@ -71,13 +71,13 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   },
   {
     id: 8,
-    src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972427/image9_hpwtuq.jpg',
     caption: 'Student Success Celebration',
     category: 'graduation',
   },
   {
     id: 9,
-    src: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=400&fit=crop',
+    src: 'https://res.cloudinary.com/dpwddkw5t/image/upload/v1767972429/image2_r7pzta.jpg',
     caption: 'Fundamental Analysis Deep Dive',
     category: 'classroom',
   },
